@@ -58,7 +58,8 @@ func WatchPodStatus(podNamespace string, labelKey string, labelValue string, tim
 			//fmt.Println(event.Type)
 			// Pod have phase, so we have to wait for the phase change to the right status when added
 			if string(event.Type) == checkOp {
-				if (checkOp == string(watch.Deleted)) || ((checkOp != string(watch.Deleted)) && (event.Object.(*api.Pod).Status.Phase == "running")) {
+				if (checkOp == string(watch.Deleted)) || ((checkOp != string(watch.Deleted)) &&
+					(event.Object.(*api.Pod).Status.Phase == "running")) {
 					return "OK", nil
 				}
 			}
