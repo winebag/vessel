@@ -56,9 +56,11 @@ func CheckPodStatus(podNamespace string, labelKey string, labelValue string, tim
 				return "", errors.New("error occours from watch chanle")
 			}
 			//fmt.Println(event.Type)
-
+			// Pod have phase, so we have to wait for the phase change to the right status when added
 			if string(event.Type) == checkOp {
-				return "OK", nil
+				if (checkOp == string(watch.Deleted)) || ((checkOp != string(watch.Deleted)) && (event.Object.(*api.Pod).Status.Phase == "running")) {
+					return "OK", nil
+				}
 			}
 
 		case <-t.C:
